@@ -24,13 +24,6 @@ You can override any of those paths without editing code:
 - `HIGHLIGHTS_VAULT_DIR`
 - `KINDLE_CLIPPINGS_FILE`
 
-Example in PowerShell:
-
-```powershell
-$env:HIGHLIGHTS_VAULT_DIR = "R:\ObsidianVault\Books"
-python Scripts\run_pipeline.py
-```
-
 ## Why It Matters
 
 Centralizing paths in one place makes the project easier to:
