@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual environments
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data files
+data/raw/*
+data/processed/*
+
+# Vault notes (personal knowledge)
+Vault/Books/*
+
+# Obsidian vault notes (generated highlights)
+Vault/Books/*.md
+
+# Any generated markdown debug files
+data/processed/*.md
+
+# Config secrets
+Config/*.env
+Config/*.json
+
+# CSV exports
+*.csv
+
+# IDE settings
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
