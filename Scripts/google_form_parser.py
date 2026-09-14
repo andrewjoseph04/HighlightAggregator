@@ -8,25 +8,11 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from Config.settings import GROUPED_HIGHLIGHTS_OUTPUT, RAW_HIGHLIGHTS_CSV
+from Scripts.tagging import format_tags
 
 
 INPUT_FILE = RAW_HIGHLIGHTS_CSV
 OUTPUT_FILE = GROUPED_HIGHLIGHTS_OUTPUT
-
-
-def format_tags(tag_string, favorite):
-    tags = []
-
-    if tag_string:
-        for tag in tag_string.split(","):
-            tag = tag.strip()
-            if tag:
-                tags.append(f"#{tag}")
-
-    if favorite.strip().lower() == "yes":
-        tags.append("#favorite")
-
-    return " ".join(tags)
 
 
 def format_markdown(quote, page, tags):
@@ -65,7 +51,7 @@ def parse_csv():
             book = row["Book"].strip()
             quote = row["Quote"].strip()
             page = row["Page number"].strip()
-            tags = format_tags(row["Tags"], row["Favorite Highlight"])
+            tags = format_tags(row)
 
             markdown = format_markdown(quote, page, tags)
 

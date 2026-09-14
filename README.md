@@ -21,7 +21,7 @@ This project solves that problem by building a simple system that:
 
 captures highlights quickly
 stores them in a structured format
-organizes them by book and topic
+organizes them by book and structured tags
 makes them searchable in a knowledge base
 
 Instead of this typical workflow:
@@ -59,7 +59,8 @@ Below is the complete architecture of the highlight ingestion pipeline.
                          │      Google Form       │
                          │                        │
                          │  Capture highlight     │
-                         │  Book / Quote / Tags   │
+                         │  Book / Quote / Topic  │
+                         │ Context / Nature / Importance │
                          └─────────────┬──────────┘
                                        │
                                        │ automatic response storage
@@ -154,7 +155,7 @@ Rows from the Google Sheet are converted into Markdown blocks like this:
 
 > Highlight text
 
-#tag1 #tag2 #favorite
+#topic #context #nature
 
 <details>
 <summary>Full Highlight</summary>
@@ -166,6 +167,17 @@ Highlight text
 </details>
 
 ---
+
+Tags always follow the Obsidian master-tag order:
+
+- Topic
+- Context
+- Nature
+
+Only the approved tags from the Obsidian master tag system are written. The
+legacy `Importance` field is ignored; it is not part of the master taxonomy.
+Common form spelling/spacing variants such as `self improvement` and `self
+improvment` are normalised to `#selfimprovement`.
 
 Each book is written to its own Markdown file.
 
@@ -185,7 +197,10 @@ While reading a physical book, open the highlight capture form on your phone and
 Book name
 Quote
 Page number
-Tags
+Topic
+Context
+Nature
+`Importance` is a legacy form field and is ignored.
 Step 2 — Run the pipeline
 python Scripts/run_pipeline.py
 Step 3 — Notes automatically appear in Obsidian
@@ -196,7 +211,7 @@ Example output:
 
 > Failure is not an option
 
-#discipline #habits
+#career #work #motivation
 
 <details>
 <summary>Full Highlight</summary>

@@ -15,7 +15,7 @@ Current behavior:
 
 - Downloads CSV from a hardcoded Google Sheets export URL
 - Reads rows with `csv.DictReader`
-- Formats tags from the `Tags` and `Favorite Highlight` columns
+- Formats ordered tags from the `Topic`, `Context`, `Nature`, and optional `Importance` columns
 - Skips duplicates by checking whether the quote already exists in the target file
 - Writes to the configured vault directory from `Config/settings.py`
 
@@ -110,14 +110,18 @@ Most scripts assume the following CSV columns exist:
 - `Book`
 - `Quote`
 - `Page number`
-- `Tags`
-- `Favorite Highlight`
+- `Topic`
+- `Context`
+- `Nature`
+- `Importance` (legacy; ignored)
 
 Most scripts also assume:
 
 - Input files already exist
 - Output folders can be created if missing
 - Duplicate detection can be done by searching for the full quote text in the target file
+- Tags are rendered in the Obsidian master-tag order: `Topic -> Context -> Nature`.
+- Only approved master tags are written; unrecognised tags are omitted.
 
 ## Current Caveats
 

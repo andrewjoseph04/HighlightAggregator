@@ -25,7 +25,7 @@ Current behavior:
 Book files contain repeated highlight blocks with:
 
 - A blockquoted preview or full quote
-- Hashtag-style tags
+- Approved master tags in `Topic -> Context -> Nature` order
 - A collapsible `<details>` section
 - A page reference when available
 

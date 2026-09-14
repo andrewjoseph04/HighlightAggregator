@@ -34,8 +34,18 @@ PIPELINE_RUN_LOG_TAG = os.getenv(
 
 GOOGLE_SHEET_ID = os.getenv(
     "HIGHLIGHTS_GOOGLE_SHEET_ID",
-    "YOUR_SHEET_ID",
+    "1-i_8iqsEayj8A0hN_eQZ8v0WyjAUcE6LrEMWPgHpERU",
 )
+
+def get_google_sheet_csv_url():
+    sheet_id = GOOGLE_SHEET_ID.strip()
+    if not sheet_id or sheet_id == "YOUR_SHEET_ID":
+        raise ValueError(
+            "Google Sheet ID is not configured. Set HIGHLIGHTS_GOOGLE_SHEET_ID "
+            "to your published Google Sheet ID."
+        )
+    return f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+
 
 GOOGLE_SHEET_CSV_URL = (
     f"https://docs.google.com/spreadsheets/d/{GOOGLE_SHEET_ID}/export?format=csv"

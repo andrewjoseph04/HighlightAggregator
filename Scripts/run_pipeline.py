@@ -12,9 +12,13 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from Config.settings import GOOGLE_SHEET_CSV_URL, PIPELINE_RUN_LOG, PIPELINE_RUN_LOG_TAG, VAULT_BOOKS_DIR
-
-CSV_URL = GOOGLE_SHEET_CSV_URL
+from Config.settings import (
+    PIPELINE_RUN_LOG,
+    PIPELINE_RUN_LOG_TAG,
+    VAULT_BOOKS_DIR,
+    get_google_sheet_csv_url,
+)
+from Scripts.tagging import format_tags
 
 VAULT_PATH = VAULT_BOOKS_DIR
 RUN_LOG_PATH = PIPELINE_RUN_LOG
@@ -37,13 +41,14 @@ def sanitize_table_cell(value):
     return text.replace("|", "/") if text else "-"
 
 def fetch_sheet():
+    csv_url = get_google_sheet_csv_url()
 
-    # response = requests.get(CSV_URL)
+    # response = requests.get(csv_url)
     # response.raise_for_status()
 
     # csv_data = StringIO(response.text)
 
-    response = requests.get(CSV_URL)
+    response = requests.get(csv_url)
 
     response.raise_for_status()
 
@@ -55,22 +60,6 @@ def fetch_sheet():
     rows = list(reader)
 
     return rows
-
-
-def format_tags(tag_string, favorite):
-
-    tags = []
-
-    if tag_string:
-        for tag in tag_string.split(","):
-            tag = tag.strip()
-            if tag:
-                tags.append(f"#{tag}")
-
-    if favorite.strip().lower() == "yes":
-        tags.append("#favorite")
-
-    return " ".join(tags)
 
 
 def format_markdown(quote, page, tags):
@@ -114,7 +103,7 @@ def group_highlights(rows):
             notes.append("Skipped rows missing Book or Quote")
             continue
 
-        tags = format_tags(row.get("Tags", ""), row.get("Favorite Highlight", ""))
+        tags = format_tags(row)
 
         markdown = format_markdown(quote, page, tags)
 

@@ -8,15 +8,13 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from Config.settings import GOOGLE_SHEET_CSV_URL
-
-
-CSV_URL = GOOGLE_SHEET_CSV_URL
+from Config.settings import get_google_sheet_csv_url
 
 
 def fetch_sheet():
+    csv_url = get_google_sheet_csv_url()
 
-    response = requests.get(CSV_URL)
+    response = requests.get(csv_url)
 
     response.raise_for_status()
 

@@ -13,13 +13,13 @@ This folder contains sample input and intermediate output for the CSV-based high
 The checked-in sample CSV uses these headers:
 
 ```text
-Timestamp,Book,Quote,Page number,Tags,Favorite Highlight
+Timestamp,Book,Quote,Page number,Topic,Context,Nature,Importance
 ```
 
 Example row shape:
 
 ```text
-19/04/2026 16:05:43,Open to Work - Ryan Roslansky,Test,2,life,
+19/04/2026 16:05:43,Open to Work - Ryan Roslansky,Test,2,career,work,lesson,
 ```
 
 ## How This Folder Is Used
@@ -31,4 +31,5 @@ Example row shape:
 
 - `processed` files are useful as inspection artifacts during development.
 - The sample data currently represents book highlights for `Open to Work - Ryan Roslansky`.
-- If you change the CSV schema, the parsing scripts will also need updates.
+- Tags are rendered in the Obsidian master-tag order: `Topic -> Context -> Nature`.
+  The legacy `Importance` column is ignored.
