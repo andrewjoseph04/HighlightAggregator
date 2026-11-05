@@ -252,6 +252,10 @@ Current Limitations
 Filesystem paths are centralized in Config/settings.py and can be overridden locally with environment variables.
 The Google Sheet ID is still hardcoded in some scripts.
 No pinned requirements.txt yet.
+TODOs
+Keep the Google Sheet private and stop committing the sheet ID in source control. Use environment variables or local secret storage for the sheet ID and any future Google credentials.
+Do not commit service-account JSON files or other secrets. The repo already ignores Config/*.env and Config/*.json, which should be retained.
+Add a GitHub Actions workflow later to automate the full end-to-end flow from Google Form submissions to the vault update pipeline, using GitHub Secrets for any required credentials.
 Future Roadmap
 
 Planned improvements include:
