@@ -243,9 +243,40 @@ def upgrade_run_log_content(content):
             )
 
     upgraded = build_run_log_preamble()
-    for row in rows:
+    for row in sorted(rows, key=lambda row: row["run_time"], reverse=True):
         upgraded += format_run_log_row(**row)
     return upgraded
+
+
+def prepend_run_log_row(row):
+
+    ensure_run_log_file()
+    with open(RUN_LOG_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    lines = content.splitlines(keepends=True)
+    row_lines = [line for line in lines if line.lstrip().startswith("|") and "Run Time" not in line and not line.lstrip().startswith("| ---")]
+    other_lines = [line for line in lines if not (line.lstrip().startswith("|") and "Run Time" not in line and not line.lstrip().startswith("| ---"))]
+    new_row = format_run_log_row(**row)
+    all_rows = row_lines + [new_row]
+
+    def run_time(line):
+        try:
+            return datetime.fromisoformat(line.strip().strip("|").split("|")[0].strip())
+        except ValueError:
+            return datetime.min
+
+    all_rows.sort(key=run_time, reverse=True)
+    divider_index = next((i for i, line in enumerate(other_lines) if line.lstrip().startswith("| ---")), None)
+    if divider_index is None:
+        with open(RUN_LOG_PATH, "w", encoding="utf-8") as f:
+            f.write(content)
+            f.write(new_row)
+        return
+
+    updated = other_lines[:divider_index + 1] + all_rows + other_lines[divider_index + 1:]
+    with open(RUN_LOG_PATH, "w", encoding="utf-8") as f:
+        f.writelines(updated)
 
 
 def format_run_log_row(
@@ -304,28 +335,25 @@ def append_run_log(
     notes,
 ):
 
-    ensure_run_log_file()
-
-    with open(RUN_LOG_PATH, "a", encoding="utf-8") as f:
-        f.write(
-            format_run_log_row(
-                run_time=run_time,
-                source=source,
-                book_title=book_title,
-                books_updated=books_updated,
-                new_files=new_files,
-                rows_fetched=rows_fetched,
-                rows_processed=rows_processed,
-                highlights_added=highlights_added,
-                duplicates_skipped=duplicates_skipped,
-                duplicate_rate=duplicate_rate,
-                tags=tags,
-                duration=duration,
-                status=status,
-                vault_path=vault_path,
-                notes=notes,
-            )
+    prepend_run_log_row(
+        dict(
+            run_time=run_time,
+            source=source,
+            book_title=book_title,
+            books_updated=books_updated,
+            new_files=new_files,
+            rows_fetched=rows_fetched,
+            rows_processed=rows_processed,
+            highlights_added=highlights_added,
+            duplicates_skipped=duplicates_skipped,
+            duplicate_rate=duplicate_rate,
+            tags=tags,
+            duration=duration,
+            status=status,
+            vault_path=vault_path,
+            notes=notes,
         )
+    )
 
 
 def main():
